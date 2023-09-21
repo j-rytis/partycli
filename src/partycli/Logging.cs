@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using partycli.Domain;
 using partycli.Domain.Models;
 
 namespace partycli
 {
-    public interface ILogging
-    {
-        void Log(string messageToLog);
-    }
-
     public class Logging : ILogging
     {
         private readonly IValueStorage _valueStorage;
 
-        public Logging(IValueStorage valueStorage)
+        private readonly IConfigurationReader _configurationReader;
+
+
+        public Logging(IValueStorage valueStorage, IConfigurationReader configurationReader)
         {
             _valueStorage = valueStorage;
+            _configurationReader = configurationReader;
         }
 
         public void Log(string messageToLog)
@@ -28,10 +28,10 @@ namespace partycli
                 Time = DateTime.Now
             };
 
-            List<LogModel> currentLog;
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.log))
+            var currentLog = _configurationReader.GetLog();
+
+            if (currentLog.Any())
             {
-                currentLog = JsonConvert.DeserializeObject<List<LogModel>>(Properties.Settings.Default.log);
                 currentLog.Add(newLog);
             }
             else

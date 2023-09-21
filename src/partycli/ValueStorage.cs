@@ -1,14 +1,16 @@
-﻿using System;
+﻿using partycli.Domain;
 
-namespace partycli.Domain
+namespace partycli
 {
-    public interface IValueStorage
-    {
-        void Store(string name, string value, bool writeToConsole);
-    }
-
     public class ValueStorage : IValueStorage
     {
+        private readonly IConsoleWriter _consoleWriter;
+
+        public ValueStorage(IConsoleWriter consoleWriter)
+        {
+            _consoleWriter = consoleWriter;
+        }
+
         public void Store(string name, string value, bool writeToConsole = true)
         {
             try
@@ -18,12 +20,12 @@ namespace partycli.Domain
                 settings.Save();
                 if (writeToConsole)
                 {
-                    Console.WriteLine("Changed " + name + " to " + value);
+                    _consoleWriter.Output("Changed " + name + " to " + value);
                 }
             }
             catch
             {
-                Console.WriteLine("Error: Couldn't save " + name + ". Check if command was input correctly.");
+                _consoleWriter.Output("Error: Couldn't save " + name + ". Check if command was input correctly.");
             }
         }
     }

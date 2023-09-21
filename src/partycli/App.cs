@@ -1,4 +1,5 @@
-﻿using partycli.Enums;
+﻿using partycli.Domain;
+using partycli.Enums;
 using System;
 
 namespace partycli
@@ -12,9 +13,9 @@ namespace partycli
             this.argumentProcessor = argumentProcessor;
         }
 
-        public void Run(string[] args)
+        public async void Run(string[] args)
         {
-            var currentState = argumentProcessor.ProcessArguments(args);
+            var currentState = await argumentProcessor.ProcessArgumentsAsync(args);
 
             if (currentState == State.none)
             {

@@ -1,29 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using partycli.Domain.Models;
 
 namespace partycli.Domain
 {
     public interface IListPrinter
     {
-        void Display(string serverListAsString);
+        void Display(List<ServerModel> serverlist);
     }
 
     public class ListPrinter : IListPrinter
     {
-        public void Display(string serverListAsString)
-        {
-            var serverlist = JsonConvert.DeserializeObject<List<ServerModel>>(serverListAsString);
+        private readonly IConsoleWriter _consoleWriter;
 
-            Console.WriteLine("Server list: ");
+        public ListPrinter(IConsoleWriter consoleWriter)
+        {
+            _consoleWriter = consoleWriter;
+        }
+
+        public void Display(List<ServerModel> serverlist)
+        {
+            _consoleWriter.Output("Server list: ");
             
             for (var index = 0; index < serverlist.Count; index++)
             {
-                Console.WriteLine("Name: " + serverlist[index].Name);
+                _consoleWriter.Output("Name: " + serverlist[index].Name);
             }
 
-            Console.WriteLine("Total servers: " + serverlist.Count);
+            _consoleWriter.Output("Total servers: " + serverlist.Count);
         }
     }
 }

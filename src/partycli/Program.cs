@@ -2,7 +2,6 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using partycli.Domain;
-using partycli.Enums;
 
 namespace partycli
 {
@@ -32,10 +31,12 @@ namespace partycli
                 .ConfigureServices((_, services) =>
                 {
                     services.AddSingleton<IArgumentProcessor, ArgumentProcessor>();
-                    services.AddSingleton<INordvpnService, NordvpnService>();
+                    services.AddSingleton<INordvpnClient, NordvpnClient>();
                     services.AddSingleton<IListPrinter, ListPrinter>();
                     services.AddSingleton<ILogging, Logging>();
                     services.AddSingleton<IValueStorage, ValueStorage>();
+                    services.AddSingleton<IConfigurationReader, ConfigurationReader>();
+                    services.AddSingleton<IConsoleWriter, ConsoleWriter>();
                     services.AddSingleton<App>();
                 });
         }
